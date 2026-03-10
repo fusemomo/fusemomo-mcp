@@ -1,0 +1,36 @@
+# Source files (only publish compiled dist/)
+src/
+tests/
+*.test.ts
+*.spec.ts
+
+# Config files
+tsconfig.json
+vitest.config.ts
+eslint.config.js
+.eslintrc*
+.prettierrc*
+
+# Development files
+.env.example
+.gitignore
+.nvmrc
+.node-version
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+
+# Documentation (keep only README.md)
+docs/
+
+# Coverage and test artifacts
+coverage/
+.nyc_output/
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
