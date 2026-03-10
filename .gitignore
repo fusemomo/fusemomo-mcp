@@ -1,37 +1,67 @@
-# Binaries for programs and plugins
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
+# Dependencies
+node_modules/
 
-# Test binary, built with "go test -c"
-*.test
+# Build output
+dist/
+build/
+out/
+*.tsbuildinfo
 
-# Output of the go coverage tool, specifically when used with LiteIDE
-*.out
-coverage.*
-*.coverprofile
-profile.cov
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-# Dependency directories (remove the comment below to include it)
-# vendor/
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
-# Go workspace file
-go.work
-tmp/
-
-# IDE specific files
-.vscode
-.idea
-
-# .env file
+# Environment variables
 .env
+.env.*
+!.env.example
 
-# Project build
-*templ.go
-tmp
+# TypeScript cache
+*.tsbuildinfo
 
-# OS X generated file
+# Coverage
+coverage/
+
+# Testing
+jest-cache/
+.nyc_output/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
 .DS_Store
 
+# OS files
+Thumbs.db
+.DS_Store
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Package managers
+.pnpm-store/
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# Node / tooling
+.eslintcache
+.cache/
+
+# Local MCP config (if used)
+.mcp/
