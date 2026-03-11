@@ -1,4 +1,4 @@
-# FuseMomo MCP Server
+# Fusemomo MCP Server
 
 ## Overview
 
