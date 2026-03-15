@@ -35,7 +35,7 @@ echo $FUSEMOMO_API_KEY
 # sk_live_...
 ```
 
-> Get your API key at [fusemomo.com](https://fusemomo.com)
+> Get your API key at [fusemomo.com/dashboard/api-keys](https://fusemomo.com/dashboard/api-keys)
 
 ---
 
