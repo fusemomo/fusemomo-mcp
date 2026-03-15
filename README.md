@@ -10,24 +10,51 @@ Fusemomo is Behavioral Entity Graph for AI agents. This MCP server is the primar
 
 ## Installation
 
-### Option 1: npx (Recommended — no install needed)
+> [!IMPORTANT]
+> **Do not put your API key in the config file.** Set it once in your shell profile — the MCP server reads it from your system environment automatically.
+
+### Step 1 — Set your API key in your shell profile
+
+Add the following line to your shell configuration file and restart your terminal (or run `source`):
+
+**macOS / Linux (bash/zsh):**
+```bash
+# ~/.zshrc  or  ~/.bashrc  or  ~/.bash_profile
+export FUSEMOMO_API_KEY="sk_live_your_key_here"
+```
+
+**Windows (PowerShell profile):**
+```powershell
+# $PROFILE
+$Env:FUSEMOMO_API_KEY = "sk_live_your_key_here"
+```
+
+Verify it is set:
+```bash
+echo $FUSEMOMO_API_KEY
+# sk_live_...
+```
+
+> Get your API key at [fusemomo.com/dashboard/api-keys](https://fusemomo.com/dashboard/api-keys)
+
+---
+
+### Step 2 — Add to your MCP client config
+
+**Option A: npx (Recommended — no install needed)**
 
 ```json
-// claude_desktop_config.json or cursor MCP config
 {
   "mcpServers": {
     "fusemomo": {
       "command": "npx",
-      "args": ["-y", "@fusemomo/fusemomo-mcp"],
-      "env": {
-        "FUSEMOMO_API_KEY": "sk_live_your_key_here"
-      }
+      "args": ["-y", "@fusemomo/fusemomo-mcp"]
     }
   }
 }
 ```
 
-### Option 2: Global Install
+**Option B: Global install**
 
 ```bash
 npm install -g @fusemomo/fusemomo-mcp
@@ -37,18 +64,30 @@ npm install -g @fusemomo/fusemomo-mcp
 {
   "mcpServers": {
     "fusemomo": {
-      "command": "fusemomo-mcp",
-      "env": {
-        "FUSEMOMO_API_KEY": "sk_live_your_key_here"
-      }
+      "command": "fusemomo-mcp"
     }
   }
 }
 ```
 
-> Get your API key at [fusemomo.com](https://fusemomo.com)
+> [!NOTE]
+> If your MCP client (e.g. Claude Desktop) spawns processes in a stripped environment and doesn't inherit your shell exports, add the reference explicitly — but still read it from the environment, not a hardcoded value:
+> ```json
+> {
+>   "mcpServers": {
+>     "fusemomo": {
+>       "command": "npx",
+>       "args": ["-y", "@fusemomo/fusemomo-mcp"],
+>       "env": {
+>         "FUSEMOMO_API_KEY": "${FUSEMOMO_API_KEY}"
+>       }
+>     }
+>   }
+> }
+> ```
+> Replace `${FUSEMOMO_API_KEY}` with `$FUSEMOMO_API_KEY` on Linux/macOS if your client supports shell expansion in env values.
 
----
+
 
 ## Configuration
 
@@ -189,8 +228,12 @@ npm run build
 **Tool not showing up in Claude Desktop:**
 Restart Claude Desktop after editing `claude_desktop_config.json`.
 
-**Authentication failed:**
-Check `FUSEMOMO_API_KEY` is set correctly and starts with `sk_live_` or `sk_test_`.
+**Authentication failed / `FUSEMOMO_API_KEY` missing:**
+The server could not read your API key from the environment.
+1. Verify it is exported: `echo $FUSEMOMO_API_KEY` (should print your key)
+2. Ensure you added it to your shell profile (`~/.zshrc`, `~/.bashrc`, etc.) and ran `source <file>` or opened a new terminal
+3. If using Claude Desktop (which may strip shell environments), add the env pass-through in the config — see the note in the Installation section above
+4. Key must start with `sk_live_` or `sk_test_`
 
 **Recommendations return plan upgrade error:**
 `get_recommendation` requires a Builder plan ($99/month). Upgrade at [fusemomo.com/upgrade](https://fusemomo.com/upgrade).
