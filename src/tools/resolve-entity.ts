@@ -51,7 +51,7 @@ export async function handleResolveEntity(args: unknown) {
   const input = parsed.data;
 
   try {
-    const data = await apiClient.post<ResolveEntityResponse>('/v1/entities/resolve', input);
+    const data = await apiClient.post<ResolveEntityResponse>('/v1/core/entities/resolve', input);
 
     logger.info('Tool called: resolve_entity', {
       entity_id: data.entity_id,

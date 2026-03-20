@@ -48,7 +48,7 @@ describe('apiClient', () => {
         text: async () => '',
       } as unknown as Response);
 
-      const result = await apiClient.post<{ entity_id: string }>('/v1/entities/resolve', {
+      const result = await apiClient.post<{ entity_id: string }>('/v1/core/entities/resolve', {
         identifiers: { email: 'test@example.com' },
       });
 
@@ -66,7 +66,7 @@ describe('apiClient', () => {
       } as unknown as Response);
 
       await expect(
-        apiClient.post('/v1/entities/resolve', { identifiers: { email: 'x@y.com' } }),
+        apiClient.post('/v1/core/entities/resolve', { identifiers: { email: 'x@y.com' } }),
       ).rejects.toBeInstanceOf(AuthenticationError);
     });
 
@@ -79,7 +79,7 @@ describe('apiClient', () => {
         json: async () => ({ message: 'Entity not found' }),
       } as unknown as Response);
 
-      await expect(apiClient.get('/v1/entities/fake-uuid')).rejects.toBeInstanceOf(NotFoundError);
+      await expect(apiClient.get('/v1/core/entities/fake-uuid')).rejects.toBeInstanceOf(NotFoundError);
       // Should NOT have retried — only called once
       expect(mockFetch).toHaveBeenCalledTimes(1);
     });
@@ -94,7 +94,7 @@ describe('apiClient', () => {
       } as unknown as Response);
 
       await expect(
-        apiClient.post('/v1/entities/resolve', {}),
+        apiClient.post('/v1/core/entities/resolve', {}),
       ).rejects.toBeInstanceOf(RateLimitError);
     });
 
@@ -114,7 +114,7 @@ describe('apiClient', () => {
         .mockResolvedValueOnce(serverResp);
 
       await expect(
-        apiClient.post('/v1/entities/resolve', {}),
+        apiClient.post('/v1/core/entities/resolve', {}),
       ).rejects.toBeInstanceOf(ServerError);
 
       expect(mockFetch).toHaveBeenCalledTimes(3);
@@ -125,7 +125,7 @@ describe('apiClient', () => {
       mockFetch.mockRejectedValueOnce(Object.assign(new Error('AbortError'), { name: 'AbortError' }));
 
       await expect(
-        apiClient.post('/v1/entities/resolve', {}),
+        apiClient.post('/v1/core/entities/resolve', {}),
       ).rejects.toBeInstanceOf(TimeoutError);
     });
   });
@@ -140,7 +140,7 @@ describe('apiClient', () => {
         text: async () => '',
       } as unknown as Response);
 
-      await apiClient.get('/v1/entities', { limit: '10', offset: '0' });
+      await apiClient.get('/v1/core/entities', { limit: '10', offset: '0' });
 
       const calledUrl = mockFetch.mock.calls[0]?.[0] as string;
       expect(calledUrl).toContain('limit=10');
@@ -158,7 +158,7 @@ describe('apiClient', () => {
         text: async () => '',
       } as unknown as Response);
 
-      await apiClient.patch('/v1/recommends/abc/outcomes', { was_followed: true });
+      await apiClient.patch('/v1/core/recommends/abc/outcomes', { was_followed: true });
 
       const call = mockFetch.mock.calls[0];
       expect(call?.[1]?.method).toBe('PATCH');

@@ -64,4 +64,6 @@ temp/
 .cache/
 
 # Local MCP config (if used)
-.mcp/
+.mcp
+.agent
+bin
