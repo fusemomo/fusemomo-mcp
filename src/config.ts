@@ -9,8 +9,8 @@ const ConfigSchema = z.object({
     .string()
     .min(1, 'FUSEMOMO_API_KEY is required')
     .refine(
-      (k) => k.startsWith('sk_live_') || k.startsWith('sk_test_'),
-      'FUSEMOMO_API_KEY must start with sk_live_ or sk_test_',
+      (k) => k.startsWith('fm_live_') || k.startsWith('fm_test_'),
+      'FUSEMOMO_API_KEY must start with fm_live_ or fm_test_',
     ),
   timeout: z.coerce.number().int().positive().default(30000),
   logLevel: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
