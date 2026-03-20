@@ -81,7 +81,7 @@ export async function handleLogInteraction(args: unknown) {
   const input = parsed.data;
 
   try {
-    const data = await apiClient.post<LogInteractionResponse>('/v1/interactions/log', input);
+    const data = await apiClient.post<LogInteractionResponse>('/v1/core/interactions/log', input);
 
     logger.info('Tool called: log_interaction', {
       interaction_id: data.interaction_id,

@@ -41,7 +41,7 @@ export async function handleGetEntity(args: unknown) {
   const { entity_id } = parsed.data;
 
   try {
-    const data = await apiClient.get<GetEntityResponse>(`/v1/entities/${entity_id}`);
+    const data = await apiClient.get<GetEntityResponse>(`/v1/core/entities/${entity_id}`);
 
     logger.info('Tool called: get_entity', {
       entity_id,

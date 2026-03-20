@@ -52,7 +52,7 @@ export async function handleGetRecommendation(args: unknown) {
 
   try {
     const data = await apiClient.post<GetRecommendationResponse | null>(
-      '/v1/recommends',
+      '/v1/core/recommends',
       input,
     );
 
