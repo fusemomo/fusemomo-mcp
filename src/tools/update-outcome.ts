@@ -51,7 +51,7 @@ export async function handleUpdateOutcome(args: unknown) {
 
   try {
     const data = await apiClient.patch<UpdateOutcomeResponse>(
-      `/v1/core/recommends/${recommendation_id}/outcomes`,
+      `/v1/core/recommends/${recommendation_id}/feedback`,
       {
         was_followed,
         ...(outcome_interaction_id !== undefined && { outcome_interaction_id }),
