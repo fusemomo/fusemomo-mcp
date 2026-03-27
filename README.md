@@ -20,19 +20,19 @@ Add the following line to your shell configuration file and restart your termina
 **macOS / Linux (bash/zsh):**
 ```bash
 # ~/.zshrc  or  ~/.bashrc  or  ~/.bash_profile
-export FUSEMOMO_API_KEY="sk_live_your_key_here"
+export FUSEMOMO_API_KEY="fm_live_your_key_here"
 ```
 
 **Windows (PowerShell profile):**
 ```powershell
 # $PROFILE
-$Env:FUSEMOMO_API_KEY = "sk_live_your_key_here"
+$Env:FUSEMOMO_API_KEY = "fm_live_your_key_here"
 ```
 
 Verify it is set:
 ```bash
 echo $FUSEMOMO_API_KEY
-# sk_live_...
+# fm_live_...
 ```
 
 > Get your API key at [fusemomo.com/dashboard/api-keys](https://fusemomo.com/dashboard/api-keys)
@@ -93,7 +93,7 @@ npm install -g @fusemomo/fusemomo-mcp
 
 | Variable | Required | Default | Description |
 |---|---|---|---|
-| `FUSEMOMO_API_KEY` | ✅ | — | Your FuseMomo API key (`sk_live_...` or `sk_test_...`) |
+| `FUSEMOMO_API_KEY` | ✅ | — | Your FuseMomo API key (`fm_live_...` or `fm_test_...`) |
 | `FUSEMOMO_API_URL` | — | `https://api.fusemomo.com` | API base URL (override for self-hosted) |
 | `FUSEMOMO_TIMEOUT` | — | `30000` | HTTP timeout in milliseconds |
 | `LOG_LEVEL` | — | `info` | Log verbosity: `debug` \| `info` \| `warn` \| `error` |
@@ -233,7 +233,7 @@ The server could not read your API key from the environment.
 1. Verify it is exported: `echo $FUSEMOMO_API_KEY` (should print your key)
 2. Ensure you added it to your shell profile (`~/.zshrc`, `~/.bashrc`, etc.) and ran `source <file>` or opened a new terminal
 3. If using Claude Desktop (which may strip shell environments), add the env pass-through in the config — see the note in the Installation section above
-4. Key must start with `sk_live_` or `sk_test_`
+4. Key must start with `fm_live_` or `fm_test_`
 
 **Recommendations return plan upgrade error:**
 `get_recommendation` requires a Builder plan ($99/month). Upgrade at [fusemomo.com/upgrade](https://fusemomo.com/upgrade).
