@@ -40,6 +40,7 @@ export const GetRecommendationSchema = z.object({
   entity_id: z.string().uuid('entity_id must be a valid UUID'),
   intent: z.string().min(1).max(255),
   lookback_days: z.number().int().positive().max(730).optional(),
+  min_success_count: z.number().int().nonnegative().max(100).optional(),
 });
 
 export type GetRecommendationInput = z.infer<typeof GetRecommendationSchema>;
