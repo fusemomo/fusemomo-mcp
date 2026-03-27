@@ -58,20 +58,35 @@ export interface LogInteractionResponse {
 //  Tool 3: get_recommendation 
 
 export interface GetRecommendationRequest {
-  entity_id: string;
   intent: string;
   lookback_days?: number;
+  min_success_count?: number;
+}
+
+export interface OpportunityEntry {
+  api: string;
+  action_type: string;
+  total_count: number;
+  success_count: number;
+  raw_success_rate: number;
+  recency_score: number;
+  feedback_weight: number;
+  composite_score: number;
+  last_success_at?: string;
+  last_occurred_at: string;
+  is_primary: boolean;
 }
 
 export interface GetRecommendationResponse {
   recommendation_id: string;
   entity_id: string;
-  recommended_action_type: string;
-  confidence: number;
+  intent?: string;
+  primary: OpportunityEntry | null;
+  opportunity_set: OpportunityEntry[];
   confidence_score: number;
-  reason?: string;
-  sample_size?: number;
-  scoring_breakdown: Record<string, unknown>;
+  data_sufficient: boolean;
+  lookback_days: number;
+  generated_at: string;
 }
 
 //  Tool 4: update_recommendation_outcome 

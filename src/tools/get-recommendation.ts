@@ -25,6 +25,11 @@ export const getRecommendationToolDef = {
         description:
           'Optional: Override default lookback window in days (default: 90 for Builder, 730 for Enterprise, max: 730)',
       },
+      min_success_count: {
+        type: 'number',
+        description:
+          'Optional: Minimum number of successful interactions required for a recommendation pair to be considered (default: 1)',
+      },
     },
     required: ['entity_id', 'intent'],
   },
@@ -51,9 +56,10 @@ export async function handleGetRecommendation(args: unknown) {
   const input = parsed.data;
 
   try {
+    const { entity_id, ...payload } = input;
     const data = await apiClient.post<GetRecommendationResponse | null>(
-      '/v1/core/recommends',
-      input,
+      `/v1/core/entities/${entity_id}/recommend`,
+      payload,
     );
 
     logger.info('Tool called: get_recommendation', {
@@ -62,13 +68,13 @@ export async function handleGetRecommendation(args: unknown) {
       execution_time: `${Date.now() - start}ms`,
     });
 
-    // Null / empty response means insufficient data
-    if (!data) {
+    // Handle missing or insufficient data
+    if (!data || !data.data_sufficient || !data.primary) {
       return {
         content: [
           {
             type: 'text' as const,
-            text: 'Insufficient interaction history for this entity and intent. Need at least 2 interactions to make a recommendation.',
+            text: 'Insufficient interaction history for this entity and intent. Need more interactions to make a reliable recommendation.',
           },
         ],
       };
@@ -81,11 +87,10 @@ export async function handleGetRecommendation(args: unknown) {
           text: JSON.stringify(
             {
               recommendation_id: data.recommendation_id,
-              recommended_action_type: data.recommended_action_type,
-              confidence: data.confidence_score ?? data.confidence,
-              reason: data.reason,
-              sample_size: data.sample_size,
-              scoring_breakdown: data.scoring_breakdown,
+              primary_recommendation: data.primary,
+              opportunity_set_size: data.opportunity_set.length,
+              confidence_score: data.confidence_score,
+              lookback_days: data.lookback_days,
             },
             null,
             2,
