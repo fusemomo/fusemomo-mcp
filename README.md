@@ -140,7 +140,7 @@ Gets the highest-success action recommendation for an entity based on historical
 **Example:**
 ```
 "What's the best way to recover payment from entity abc-123?"
-→ { recommended_action_type: "send_email", confidence: 0.91, sample_size: 12, ... }
+→ { data_sufficient: true, confidence_score: 0.91, primary: { action_type: "send_email", raw_success_rate: 0.85, ... }, ... }
 ```
 
 ---
