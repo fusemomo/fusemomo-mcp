@@ -61,6 +61,7 @@ export interface GetRecommendationRequest {
   intent: string;
   lookback_days?: number;
   min_success_count?: number;
+  agent_id?: string;
 }
 
 export interface OpportunityEntry {

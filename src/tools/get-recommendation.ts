@@ -30,6 +30,10 @@ export const getRecommendationToolDef = {
         description:
           'Optional: Minimum number of successful interactions required for a recommendation pair to be considered (default: 1)',
       },
+      agent_id: {
+        type: 'string',
+        description: 'Optional: ID of the agent requesting the recommendation. Useful for segmented attribution tracking.',
+      },
     },
     required: ['entity_id', 'intent'],
   },
