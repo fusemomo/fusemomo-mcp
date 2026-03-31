@@ -7,18 +7,18 @@ import { logger } from '../utils/logger.js';
 export const getRecommendationToolDef = {
   name: 'get_recommendation',
   description:
-    'Get the highest-success action recommendation for an entity based on historical behavioral data. Returns the action type most likely to succeed for this entity and intent. Requires Builder plan or higher.',
+    'Ask the intelligent engine for the statistically best action to take next for a given entity and intent. Based on historical data, this tool returns the exact communication channel or action type most likely to succeed. Call this *before* deciding what to do.',
   inputSchema: {
     type: 'object' as const,
     properties: {
       entity_id: {
         type: 'string',
-        description: 'UUID of the entity to get recommendation for (from resolve_entity)',
+        description: 'The internal Fusemomo UUID of the entity (must be obtained from resolve_entity first).',
       },
       intent: {
         type: 'string',
         description:
-          "Business goal (e.g. 'payment_recovery', 'incident_response', 'lead_nurturing', 'onboarding')",
+          "The overarching business goal you are trying to achieve (e.g., 'payment_recovery', 'lead_nurturing', 'upsell', 'onboarding'). The recommendation is optimized strictly for this goal.",
       },
       lookback_days: {
         type: 'number',
@@ -91,10 +91,31 @@ export async function handleGetRecommendation(args: unknown) {
           text: JSON.stringify(
             {
               recommendation_id: data.recommendation_id,
-              primary_recommendation: data.primary,
-              opportunity_set_size: data.opportunity_set.length,
+              entity_id: data.entity_id,
+              intent: data.intent,
               confidence_score: data.confidence_score,
+              data_sufficient: data.data_sufficient,
               lookback_days: data.lookback_days,
+              primary_recommendation: data.primary
+                ? {
+                    channel: data.primary.api,
+                    action_type: data.primary.action_type,
+                    composite_score: data.primary.composite_score,
+                    raw_success_rate: data.primary.raw_success_rate,
+                    success_count: data.primary.success_count,
+                    total_count: data.primary.total_count,
+                    last_success_at: data.primary.last_success_at,
+                  }
+                : null,
+              all_channels_ranked: data.opportunity_set.map((entry) => ({
+                channel: entry.api,
+                action_type: entry.action_type,
+                composite_score: entry.composite_score,
+                raw_success_rate: entry.raw_success_rate,
+                success_count: entry.success_count,
+                total_count: entry.total_count,
+                is_primary: entry.is_primary,
+              })),
             },
             null,
             2,

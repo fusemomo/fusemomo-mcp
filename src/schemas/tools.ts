@@ -26,7 +26,7 @@ export const LogInteractionSchema = z.object({
   action: z.string().min(1).max(255),
   outcome: OutcomeEnum,
   intent: z.string().max(255).optional(),
-  agent_id: z.string().max(255).optional(),
+  agent_id: z.string().min(1).max(255),
   external_ref: z.string().max(500).optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
   occurred_at: z.string().datetime().optional(),
@@ -51,7 +51,7 @@ export type GetRecommendationInput = z.infer<typeof GetRecommendationSchema>;
 export const UpdateOutcomeSchema = z.object({
   recommendation_id: z.string().uuid('recommendation_id must be a valid UUID'),
   was_followed: z.boolean(),
-  outcome_interaction_id: z.string().uuid().optional(),
+  outcome_interaction_id: z.string().uuid('outcome_interaction_id must be a valid UUID').optional(),
 });
 
 export type UpdateOutcomeInput = z.infer<typeof UpdateOutcomeSchema>;

@@ -7,7 +7,7 @@ import { logger } from '../utils/logger.js';
 export const updateOutcomeToolDef = {
   name: 'update_recommendation_outcome',
   description:
-    "Update a recommendation with whether it was followed and what the outcome was. Closes the feedback loop so Fusemomo can measure recommendation quality and improve future suggestions. Call this after acting on a get_recommendation result.",
+    "Close the feedback loop on a previously retrieved recommendation. Once you act upon a recommendation from get_recommendation, you MUST call this to inform the engine if the recommendation actually worked or failed. This self-corrects the algorithm.",
   inputSchema: {
     type: 'object' as const,
     properties: {
@@ -17,12 +17,12 @@ export const updateOutcomeToolDef = {
       },
       was_followed: {
         type: 'boolean',
-        description: 'Whether the agent followed this recommendation',
+        description: 'True if you actually executed the exact action recommended by the engine. False if you chose to do something else instead.',
       },
       outcome_interaction_id: {
         type: 'string',
         description:
-          'Optional: UUID of the interaction that resulted from following the recommendation (from log_interaction)',
+          'Optional: UUID of the interaction that resulted from following the recommendation. MUST belong to the exact same entity as the recommendation (via log_interaction).',
       },
     },
     required: ['recommendation_id', 'was_followed'],

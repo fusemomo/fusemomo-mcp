@@ -7,13 +7,13 @@ import { logger } from '../utils/logger.js';
 export const getEntityToolDef = {
   name: 'get_entity',
   description:
-    'Retrieve complete profile for an entity including all linked identifiers, behavioral score, interaction statistics, and recent interaction history.',
+    "Retrieve the complete behavioral profile and consolidated history of an entity. Provides historical success rates, behavioral scores, all linked identifiers, and recent interactions. Use this when you need absolute context on an entity's past behaviors before deciding how to approach them.",
   inputSchema: {
     type: 'object' as const,
     properties: {
       entity_id: {
         type: 'string',
-        description: 'UUID of the entity to retrieve',
+        description: 'The internal Fusemomo UUID of the entity. You MUST obtain this by calling resolve_entity first.',
       },
     },
     required: ['entity_id'],
