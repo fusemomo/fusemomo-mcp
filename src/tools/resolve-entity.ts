@@ -7,14 +7,14 @@ import { logger } from '../utils/logger.js';
 export const resolveEntityToolDef = {
   name: 'resolve_entity',
   description:
-    'Resolve one or more identifiers into a canonical entity. Links identifiers across different APIs (email, Stripe, GitHub, etc.) into one unified entity record. Creates the entity if it does not exist. Use this before logging interactions or getting recommendations.',
+    'Resolve external identifiers (e.g. Email, GitHub ID, Stripe ID) into a unified internal Fusemomo Entity. THIS MUST BE YOUR FIRST STEP in any workflow, as every other tool requires the internal `entity_id` returned here. If the entity does not exist, this tool automatically safely creates it.',
   inputSchema: {
     type: 'object' as const,
     properties: {
       identifiers: {
         type: 'object',
         description:
-          "Key-value pairs of identifiers. Keys are sources (e.g. 'email', 'stripe_customer_id', 'github_login'), values are the identifier values.",
+          "MANDATORY: Key-value map of known identifiers. Keys are the source platform (e.g., 'email', 'phone', 'stripe_customer_id', 'github_username'), values are the actual IDs. Provide all known pairs to ensure accurate merging.",
         additionalProperties: { type: 'string' },
       },
       entity_type: {
