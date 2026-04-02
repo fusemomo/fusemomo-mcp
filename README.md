@@ -87,8 +87,6 @@ npm install -g @fusemomo/fusemomo-mcp
 > ```
 > Replace `${FUSEMOMO_API_KEY}` with `$FUSEMOMO_API_KEY` on Linux/macOS if your client supports shell expansion in env values.
 
-
-
 ## Configuration
 
 | Variable | Required | Default | Description |
@@ -105,70 +103,70 @@ npm install -g @fusemomo/fusemomo-mcp
 
 ### `resolve_entity`
 
-Resolves one or more identifiers into a canonical entity. Creates the entity if it doesn't exist. Links identifiers across APIs into one unified record (L1 Identity Resolution).
+**THIS MUST BE YOUR FIRST STEP in any workflow.** Resolves one or more known identifiers into a canonical entity, creating it if it doesn't exist. You must call this to get the internal `entity_id` required by all other tools.
 
 **Required:** `identifiers` (object: key=source, value=identifier)
 
 **Example:**
 ```
 "Resolve alice@example.com"
-→ { entity_id: "...", display_name: "Alice", behavioral_score: 0.82, total_interactions: 14, ... }
+→ { "entity_id": "...", "tenant_id": "...", "display_name": "Alice", "identifiers": [...], "total_interactions": 14, ... }
 ```
 
 ---
 
 ### `log_interaction`
 
-Logs a behavioral event to the immutable interaction graph (L2 Behavioral Graph). Call this whenever your agent takes an action through any API.
+Logs a behavioral event to the immutable interaction graph. This forms the graph that drives future ML recommendations. Call this whenever your agent takes an action through any API.
 
-**Required:** `entity_id`, `api`, `action_type`, `action`, `outcome`
+**Required:** `entity_id`, `api`, `action_type`, `action`, `outcome`, `agent_id` (Compulsory: identify your specific agent)
 
 **Example:**
 ```
-"Log that we sent a payment reminder email to entity abc-123 via SendGrid, outcome: success"
-→ "Interaction logged successfully. ID: xyz-789"
+"Log that agent_outreach_v2 sent a payment reminder email to entity abc-123 via SendGrid, outcome: success"
+→ { "interaction_id": "...", "entity_id": "...", "logged_at": "..." }
 ```
 
 ---
 
 ### `get_recommendation`
 
-Gets the highest-success action recommendation for an entity based on historical behavioral data (L3 Behavioral Intelligence). Requires Builder plan.
+Gets the highest-success action recommendation based on historical behavioral data. **Call this *before* deciding what to do**, so you can select the statistically best channel based on past data. Requires Builder plan.
 
 **Required:** `entity_id`, `intent`
 
 **Example:**
 ```
 "What's the best way to recover payment from entity abc-123?"
-→ { data_sufficient: true, confidence_score: 0.91, primary: { action_type: "send_email", raw_success_rate: 0.85, ... }, ... }
+→ { "data_sufficient": true, "confidence_score": 0.91, "primary": { "api": "sendgrid", "action_type": "send_email", "raw_success_rate": 0.85, ... }, "opportunity_set": [...] }
 ```
 
 ---
 
 ### `update_recommendation_outcome`
 
-Closes the recommendation feedback loop by recording whether the recommendation was followed and what the outcome was. Improves future recommendation quality.
+**Close the feedback loop.** You MUST call this after attempting an action recommended by `get_recommendation`. Records whether you followed the advice and helps self-correct the future ML algorithm.
 
 **Required:** `recommendation_id`, `was_followed`
 
 **Example:**
 ```
-"Mark recommendation rec-456 as followed, with outcome interaction int-789"
-→ "Recommendation outcome updated. Followed: true, Outcome: success"
+"Mark recommendation rec-456 as followed"
+→ { "recommendation_id": "...", "was_followed": true, "outcome": "success" }
 ```
 
 ---
 
 ### `get_entity`
 
-Retrieves a complete entity profile including all linked identifiers, behavioral stats, and recent interaction history.
+Retrieves a complete entity profile. Use this when you need absolute context on an entity's past behaviors and all linked identifiers before deciding how to approach them.
 
 **Required:** `entity_id`
 
 **Example:**
 ```
 "Get the full profile for entity abc-123"
-→ { entity_id: "...", identifiers: [...], behavioral_score: 0.82, recent_interactions: [...], ... }
+→ { "id": "...", "identifiers": [...], "interactions": [...], "behavioral_score": 0.82, ... }
 ```
 
 ---
