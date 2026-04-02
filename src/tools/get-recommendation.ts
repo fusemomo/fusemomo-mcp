@@ -92,28 +92,37 @@ export async function handleGetRecommendation(args: unknown) {
             {
               recommendation_id: data.recommendation_id,
               entity_id: data.entity_id,
-              intent: data.intent,
+              intent: data.intent ?? null,
               confidence_score: data.confidence_score,
               data_sufficient: data.data_sufficient,
               lookback_days: data.lookback_days,
-              primary_recommendation: data.primary
+              generated_at: data.generated_at,
+              primary: data.primary
                 ? {
-                    channel: data.primary.api,
+                    api: data.primary.api,
                     action_type: data.primary.action_type,
                     composite_score: data.primary.composite_score,
                     raw_success_rate: data.primary.raw_success_rate,
+                    recency_score: data.primary.recency_score,
+                    feedback_weight: data.primary.feedback_weight,
                     success_count: data.primary.success_count,
                     total_count: data.primary.total_count,
-                    last_success_at: data.primary.last_success_at,
+                    last_success_at: data.primary.last_success_at ?? null,
+                    last_occurred_at: data.primary.last_occurred_at,
+                    is_primary: data.primary.is_primary,
                   }
                 : null,
-              all_channels_ranked: data.opportunity_set.map((entry) => ({
-                channel: entry.api,
+              opportunity_set: data.opportunity_set.map((entry) => ({
+                api: entry.api,
                 action_type: entry.action_type,
                 composite_score: entry.composite_score,
                 raw_success_rate: entry.raw_success_rate,
+                recency_score: entry.recency_score,
+                feedback_weight: entry.feedback_weight,
                 success_count: entry.success_count,
                 total_count: entry.total_count,
+                last_success_at: entry.last_success_at ?? null,
+                last_occurred_at: entry.last_occurred_at,
                 is_primary: entry.is_primary,
               })),
             },
