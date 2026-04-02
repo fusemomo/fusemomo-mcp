@@ -93,7 +93,15 @@ export async function handleLogInteraction(args: unknown) {
       content: [
         {
           type: 'text' as const,
-          text: `Interaction logged successfully. ID: ${data.interaction_id}`,
+          text: JSON.stringify(
+            {
+              interaction_id: data.interaction_id,
+              entity_id: data.entity_id,
+              logged_at: data.logged_at,
+            },
+            null,
+            2,
+          ),
         },
       ],
     };

@@ -68,7 +68,16 @@ export async function handleUpdateOutcome(args: unknown) {
       content: [
         {
           type: 'text' as const,
-          text: `Recommendation outcome updated. Followed: ${data.was_followed}, Outcome: ${data.outcome ?? 'unknown'}`,
+          text: JSON.stringify(
+            {
+              recommendation_id: data.recommendation_id,
+              was_followed: data.was_followed,
+              outcome: data.outcome,
+              updated_at: data.updated_at ?? null,
+            },
+            null,
+            2,
+          ),
         },
       ],
     };
